@@ -9,5 +9,12 @@ module.exports = (app) => {
             }
         })
     })
-    app.put("/api/workouts")
+    app.put("/api/workouts/:workout", ({ params, body }, res) => {
+        db.Workout.findOneAndUpdate
+    })
+    app.post('/api/workouts', (req, res) => {
+        db.Workout.create({}.then(newWorkout => {
+            res.json(newWorkout)
+        }))
+    })
 }
