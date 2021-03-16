@@ -12,11 +12,13 @@ module.exports = (app) => {
   });
 
   app.put("/api/workouts/:id", ({ params, body }, res) => {
+      console.log(body)
     db.Workout.findByIdAndUpdate(
-        params.id, 
-        {$push:{exercises: body} }, 
+        {_id: params.id}, 
+        {$push:{exercises: body}}, 
         { new: true, runValidators: true }
     ).then(data => res.json(data))
+    .catch(err => console.log(err))
   });
 
   app.post("/api/workouts", (req, res) => {
@@ -24,4 +26,12 @@ module.exports = (app) => {
       res.json(newWorkout);
     });
   });
+
+  app.get("/api/workouts/range", (req, res) => {
+      db.Workout.aggregate().sort({
+          _id: -1
+      }).limit(7).then((pastWorkout) => {
+        res.json(pastWorkout);
+    })
+    })
 };
